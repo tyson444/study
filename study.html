@@ -1,0 +1,342 @@
+<html>
+	<head>
+		<meta charset = "UTF-8">
+		<title> make TableTyson</title>
+	    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script type="text/javascript">
+			$(function(){
+
+				var sum = 0;
+				var num = 1;
+
+
+				$('#add').click(function(){
+
+					var tsum1 = 0;
+					var tsum2 = 0;
+					var $form1 = $('.input-form input[name=num1]');
+					var $form2 = $('.input-form input[name=num2]');
+					sum = parseInt($form1.val()) + parseInt($form2.val());
+
+					var $tr = $('<tr></tr>');
+					var $td = $('<td></td>');
+					var $ol = $('<ol></ol>');
+
+					$td.append($form1.clone());
+					$td.append('+');
+					$td.append($form2.clone());
+					$td.append('<button class="sub-btn">계산</button>');
+					$td.append('<button class="del-btn">삭제</button>');
+
+					//색깔 넣기
+					//$(“tr:even”).css(“background”, “#DDD”)
+
+					//alert($('#addtable>tbody>tr>td:last').text());
+					var preSum = parseInt($('#addtable>tbody>tr>td:last').prev().text());
+					var color = "";
+					if(preSum>sum){
+						//alert('SMALLLLLL');
+						color = "blue";
+					}else if(preSum<sum){
+						//alert('BIIIGGGGGGG');
+						color = "red";
+					}else if(preSum=sum){
+						//alert('SAME');
+						color = "yellow";
+					}else{
+						//alert('WTFFFFFF');
+						color = "black";
+					};
+					//alert(color);
+					//alert($('#addtable>tbody>tr').text());
+
+					//$tr.append('<li> </li>');
+					//$ol.append('<li> </li>');
+					$tr.append('<td id=no>' + num + '</td>');
+					$tr.append($td);
+					$tr.append('<td>' + sum + '</td>');
+					$tr.append('<td>' + color + '</td>');		//색깔 넣기
+
+					$('#addtable>tbody').append($tr);
+
+					//색깔 넣기 case
+					switch(color){
+						case 'blue':
+							$('#addtable>tbody>tr>td:last').css("background", "#0000FF");
+							break;
+						case 'red':
+							$('#addtable>tbody>tr>td:last').css("background", "#FF0000");
+							break;
+						case 'yellow':
+							$('#addtable>tbody>tr>td:last').css("background", "#FFFF00");
+							break;
+						case 'black':
+							$('#addtable>tbody>tr>td:last').css("background", "#000000");
+							break;
+						
+						default:
+							alert('ssssssssssssss');
+					};
+
+
+					$('#addtable input[name=num1]').each(function(){
+						tsum1 += parseInt($(this).val());
+					});
+
+
+					$('#sum1').val(tsum1);
+
+					$('#addtable input[name=num2]').each(function(){
+						tsum2 += parseInt($(this).val());
+					});
+					$('#sum2').val(tsum2);
+
+					$('#addtable>tfoot>tr>td:last').text(tsum1+tsum2);
+
+					num++;
+				});//End Click.
+
+//계산 버튼 눌렀을때.
+				$('#addtable').on('click','.sub-btn', function(index){
+					var retsum1 = 0;
+					var retsum2 = 0;
+					var reNum1 = $(this).prev().prev();
+
+					var reNum2 = $(this).prev();
+
+					var resum=0;
+					var pVal = 0;
+					var nVal = 0;
+					var color ="";
+
+					resum = parseInt(reNum1.val())+parseInt(reNum2.val());
+					//변경값 다시 넣기.
+					$(this).parent().next().text(resum);
+					//reCalculated 
+
+					//다시 계산후 색깔 바꾸기
+					pVal = parseInt($(this).parent().parent().prev().children('td:eq(1)').text());
+					nVal = parseInt($(this).parent().parent().next().children('td:eq(1)').text());
+
+					//현재 칼럼 색깔바꾸기.
+					if(pVal>resum){
+						//alert('SMALLLLLL');
+						color = "blue";
+						$(this).parent().parent().children('td:eq(2)').css("background", "#0000FF").text(color);
+					}else if(pVal<resum){
+						//alert('BIIIGGGGGGG');
+						color = "red";
+						$(this).parent().parent().children('td:eq(2)').css("background", "#FF0000").text(color);
+					}else if(pVal=resum){
+						//alert('SAME');
+						color = "yellow";
+						$(this).parent().parent().children('td:eq(2)').css("background", "#FFFF00").text(color);
+					}else{
+						//alert('WTFFFFFF');
+						color = "black";
+						$(this).parent().parent().children('td:eq(2)').css("background", "#000000").text(color);
+					};
+
+					//밑에 줄 색깔바꾸기.
+					if(resum>nVal){
+						//alert('SMALLLLLL');
+						color = "blue";
+						$(this).parent().parent().next().children('td:eq(2)').css("background", "#0000FF").text(color);
+					}else if(resum<nVal){
+						//alert('BIIIGGGGGGG');
+						color = "red";
+						$(this).parent().parent().next().children('td:eq(2)').css("background", "#FF0000").text(color);
+					}else if(resum=nVal){
+						//alert('SAME');
+						color = "yellow";
+						$(this).parent().parent().next().children('td:eq(2)').css("background", "#FFFF00").text(color);
+					}else{
+						//alert('WTFFFFFF');
+						color = "black";
+						$(this).parent().parent().next().children('td:eq(2)').css("background", "#000000").text(color);
+					};
+
+
+
+					//밑에 섬 구하기
+					$('tbody>tr input[name=num1]').each(function(){
+						retsum1 +=parseInt($(this).val());
+					});
+
+					$('#sum1').val(retsum1);
+
+					$('tbody>tr input[name=num2]').each(function(){
+						retsum2 +=parseInt($(this).val());
+					});
+					//alert(retsum2);
+					$('#sum2').val(retsum2);
+					$('#addtable>tfoot>tr>td:last').text(retsum1+retsum2);
+
+
+
+				});//End Calc
+
+				//삭제 테이블
+				$('#addtable').on('click','.del-btn', function(index){
+
+        	        //삭제
+        	        //$(this).parent().parent().detach();
+        	        var retsum1 = 0;
+					var retsum2 = 0;
+					var pVal = 0;
+					var nVal = 0;
+					var color ="";
+
+        	        $('tbody>tr input[name=num1]').each(function(){
+						retsum1 +=parseInt($(this).val());
+					});
+
+					$('#sum1').val(retsum1);
+
+					$('tbody>tr input[name=num2]').each(function(){
+						retsum2 +=parseInt($(this).val());
+					});
+
+					$('#sum2').val(retsum2);
+					$('#addtable>tfoot>tr>td:last').text(retsum1+retsum2);
+
+					//alert($(this).parent().parent().next().children('td:eq(1)').text());
+					//alert($(this).parent().parent().prev().children('td:eq(1)').text());
+
+					var index = $(this).parent().parent().index();
+					var pIndex = index -1;
+					var nIndex = index + 1;
+
+					//pVal = parseInt($(this).parent().parent().prev().children('td:eq(2)').text());
+					//nVal = parseInt($(this).parent().parent().next().children('td:eq(2)').text());
+					//alert(pIndex);
+					pVal = parseInt($(this).parent().parent().eq(pIndex).children('td:eq(2)').text());
+					nVal = parseInt($(this).parent().parent().eq(nIndex).children('td:eq(2)').text());
+					
+					//alert('pval : ' + pVal);
+
+					if(pVal>nVal){
+						//alert('SMALLLLLL');
+						color = "blue";
+						$(this).parent().parent().next().children('td:eq(3)').css("background", "#0000FF").text(color);
+					}else if(pVal<nVal){
+						//alert('BIIIGGGGGGG');
+						color = "red";
+						$(this).parent().parent().next().children('td:eq(3)').css("background", "#FF0000").text(color);
+					}else if(pVal=nVal){
+						//alert('SAME');
+						color = "yellow";
+						$(this).parent().parent().next().children('td:eq(3)').css("background", "#FFFF00").text(color);
+					}else{
+						//alert('WTFFFFFF');
+						color = "black";
+						$(this).parent().parent().next().children('td:eq(3)').css("background", "#000000").text(color);
+					};
+
+
+					//No. 번호 다시 매기기
+					//alert($(this).parent().prev().text());
+					//alert($(this).parent().parent().next().children('td:eq(0)').text());
+
+					//var reNum = $(this).parent().prev().text()
+					//alert(reNum);
+
+					//Node PresentNumber -> NextNumber
+					$(this).parent().parent().next().children('td:eq(0)').text($(this).parent().prev().text());
+					num--;
+
+
+					alert($(this).parent().nextAll('id = no').text());
+					$('tbody>tr input[name=num2]').each(function(){
+						retsum2 +=parseInt($(this).val());
+					});
+
+					$(this).parent().parent().remove();//위에서 색깔 찾으려면 마지막에 지워야함.
+
+	            });
+
+	            // 초기화
+
+	            //$("#tableReset").on("click",function(){ 
+	            $("#tableReset").click(function(){ 	
+
+	         	        $('#addtable>tbody').children().detach();
+
+						$('#addtable>tbody').detach1(1);
+
+						$.detach11($('#addtable>tbody'));
+
+	         	        num = 1;
+
+	            });
+
+	            //ajax_sample.html?id=dd&s=aa;
+
+	            $('#ajax').click(function(){
+	            	var dd = '10';
+	            	var url = './ajax_sample.html';
+	            	$.ajax({
+	            		type:'GET',
+	            		data:{id:dd,s:'aa'},
+	            		url:url,
+	            		success:function(data){
+	            			$('#return-val').html(data);
+	            		},
+	            		error:function(data){
+	            			alert(data);
+	            		}
+	            	});
+	            });
+
+	            $.fn.detach1 = function(nm){
+	            	alert(nm);
+					$(this).children().detach();
+				};
+
+				$.detach11 = function(val){
+					val.children().detach();
+				};
+			});//End Function
+		</script>
+
+	</head>
+
+	<body>
+
+		<div class='input-form'>
+			<input type='text' value='' name='num1'/> + 
+			<input type='text' value='' name='num2'/>
+					<button id='add'> 추가 </button>
+					<input type="button" value="reset" id="tableReset"/>
+					<button id='ajax'>ajax</button>
+
+		</div>
+				<ol>
+		<table id = "addtable" border = "3" cellspacing ="1">
+			<caption>테이블 테스트</caption>
+			<thead>
+				<tr>
+					<th>No.</th>
+					<th>값</th>
+					<th>합계</th>
+					<th>비고</th>
+				</tr>
+			</thead>
+			<tbody>
+
+			</tbody>
+			<tfoot>
+
+					<tr>
+						<td>sum</td>
+						<td><input type='text' id='sum1'/> + <input type='text' id='sum2' /></td>
+						<td></td>
+						<td></td>
+					</tr>
+			</tfoot>
+		</table>
+		<div id='return-val'></div>
+				</ol>
+	</body>
+
+</html>
